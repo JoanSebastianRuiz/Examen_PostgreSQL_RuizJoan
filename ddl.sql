@@ -9,7 +9,7 @@ create table Rol(
 	id serial primary key,
 	idDepartamento int not null,
 	rol varchar(100) not null unique,
-	foreign key (idDepartamento) references Departamento(id)
+	foreign key (idDepartamento) references Departamento(id) ON DELETE CASCADE
 );
 
 create table Empleado(
@@ -22,7 +22,7 @@ create table Empleado(
 	email varchar(150) not null unique,
 	fechaContratacion date not null,
 	comision numeric(5,2) null,
-	foreign key (idRol) references Rol(id)
+	foreign key (idRol) references Rol(id) ON DELETE CASCADE
 );
 
 create type dia_enum 
@@ -34,7 +34,7 @@ create table Horario(
 	dia dia_enum not null,
 	horaEntrada time not null,
 	horaSalida time not null,
-	foreign key (idEmpleado) references Empleado(id)
+	foreign key (idEmpleado) references Empleado(id) ON DELETE CASCADE
 );
 
 create table Cliente(
@@ -59,7 +59,7 @@ create table Vehiculo(
 	anio varchar(4) not null,
 	precio numeric(14,2) null,
 	estado estado_enum null,
-	foreign key (idCliente) references Cliente(id)
+	foreign key (idCliente) references Cliente(id) ON DELETE CASCADE
 );
 
 create table InteresVehiculo(
@@ -68,8 +68,8 @@ create table InteresVehiculo(
 	idVehiculo int not null,
 	compraRealizada boolean not null,
 	descripcion text not null,
-	foreign key (idCliente) references Cliente(id),
-	foreign key (idVehiculo) references Vehiculo(id)
+	foreign key (idCliente) references Cliente(id) ON DELETE CASCADE,
+	foreign key (idVehiculo) references Vehiculo(id) ON DELETE CASCADE
 );
 
 create table Venta(
@@ -80,9 +80,9 @@ create table Venta(
 	fecha date not null,
 	comision numeric(10,2) not null check (comision>0),
 	total numeric(14,2) not null check (total>0),
-	foreign key (idCliente) references Cliente(id),
-	foreign key (idVehiculo) references Vehiculo(id),
-	foreign key (idEmpleado) references Empleado(id)
+	foreign key (idCliente) references Cliente(id) ON DELETE CASCADE,
+	foreign key (idVehiculo) references Vehiculo(id) ON DELETE CASCADE,
+	foreign key (idEmpleado) references Empleado(id) ON DELETE CASCADE
 );
 
 create table TipoServicio(
@@ -98,9 +98,9 @@ create table Servicio(
 	idEmpleado int not null,
 	fecha date not null,
 	total numeric(10,2) not null check (total>0),
-	foreign key (idTipoServicio) references TipoServicio(id),
-	foreign key (idVehiculo) references Vehiculo(id),
-	foreign key (idEmpleado) references Empleado(id)
+	foreign key (idTipoServicio) references TipoServicio(id) ON DELETE CASCADE,
+	foreign key (idVehiculo) references Vehiculo(id) ON DELETE CASCADE,
+	foreign key (idEmpleado) references Empleado(id) ON DELETE CASCADE
 );
 
 create table Proveedor(
@@ -122,16 +122,16 @@ create table PiezaxServicio(
 	idServicio int not null,
 	idPieza int not null,
 	cantidad int not null,
-	foreign key (idServicio) references Servicio(id),
-	foreign key (idPieza) references Pieza(id)
+	foreign key (idServicio) references Servicio(id) ON DELETE CASCADE,
+	foreign key (idPieza) references Pieza(id) ON DELETE CASCADE
 );
 
 create table ProveedorxPieza(
 	id serial primary key,
 	idProveedor int not null,
 	idPieza int not null,
-	foreign key (idProveedor) references Proveedor(id),
-	foreign key (idPieza) references Pieza(id)
+	foreign key (idProveedor) references Proveedor(id) ON DELETE CASCADE,
+	foreign key (idPieza) references Pieza(id) ON DELETE CASCADE
 );
 
 create or replace function calcular_comision(idEmpleado int, idVehiculo int)
